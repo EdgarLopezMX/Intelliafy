@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:intelliafy_app/screens/forget_password.dart';
+import 'package:intelliafy_app/screens/forget_password_screen.dart';
 import 'package:intelliafy_app/screens/profile_screen.dart';
 import 'package:intelliafy_app/screens/signup_screen.dart';
 
