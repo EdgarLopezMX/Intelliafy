@@ -7,12 +7,13 @@ class SignUpFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final Color accentColor = Theme.of(context).colorScheme.secondary;
 
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50.0),
+            padding: const EdgeInsets.symmetric(horizontal: 65.0),
             child: Center(
               child: RichText(
                 text: TextSpan(children: [
@@ -33,7 +34,7 @@ class SignUpFooter extends StatelessWidget {
                                 builder: (context) => const SignUp())),
                       text: 'Registrate!',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: accentColor,
                         fontSize: 13,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,

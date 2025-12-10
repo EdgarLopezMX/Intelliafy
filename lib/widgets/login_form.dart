@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
                   decoration: const InputDecoration(hintText: "Email"),
                 )),
             const SizedBox(
-              height: 5,
+              height: 16,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -116,10 +116,10 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             const SizedBox(
-              height: 5,
+              height: 16,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              padding: const EdgeInsets.symmetric(horizontal: 65.0),
               child: ElevatedButton(
                 onPressed: widget.onSubmit,
                 style: ElevatedButton.styleFrom(
