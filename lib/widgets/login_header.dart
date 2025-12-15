@@ -2,36 +2,47 @@ import 'package:flutter/material.dart';
 
 class LoginHeader extends StatelessWidget {
   final double logoSize;
-  const LoginHeader({super.key, required this.logoSize});
+  final String firstText;
+  final String secondText;
+
+  const LoginHeader(
+      {super.key,
+      required this.logoSize,
+      required this.firstText,
+      required this.secondText});
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+    final double finalLogoDimension = logoSize.clamp(60.0, 120.0);
+    const double horizontalPadding = 48.0;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 380),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: Column(children: [
             const SizedBox(
-              height: 40,
+              height: 30,
             ),
             SizedBox(
-              width: logoSize,
-              height: logoSize,
+              width: finalLogoDimension,
+              height: finalLogoDimension,
               child: Image.asset(
                 'assets/images/icon.png',
                 fit: BoxFit.contain,
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 30,
             ),
             Text(
-              "BIENVENIDO",
+              firstText,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 32,
+                color: primaryColor,
+                fontSize: 36,
                 fontFamily: 'Inter',
               ),
             ),
@@ -39,17 +50,17 @@ class LoginHeader extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "Inicia sesión con tu cuenta",
+              secondText,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 16,
+                color: primaryColor,
+                fontSize: 18,
                 fontFamily: 'Inter',
               ),
             ),
           ]),
         ),
-      ],
+      ),
     );
   }
 }
