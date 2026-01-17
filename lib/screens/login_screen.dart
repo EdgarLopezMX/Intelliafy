@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/widgets/login_header.dart';
-import 'package:intelliafy_app/widgets/login_form.dart';
-import 'package:intelliafy_app/widgets/login_footer.dart';
+import 'package:intelliafy_app/widgets/login/login_header.dart';
+import 'package:intelliafy_app/widgets/login/login_form.dart';
+import 'package:intelliafy_app/widgets/login/login_footer.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
