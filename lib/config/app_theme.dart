@@ -20,12 +20,13 @@ ThemeData buildIntelliafyTheme() {
 
     //-----------//
 
-    fontFamily: 'Inter',
     textTheme: const TextTheme(
       headlineLarge: TextStyle(
           fontWeight: FontWeight.bold, fontSize: 24.0, color: kPrimaryColor),
       bodyLarge: TextStyle(fontSize: 16.0, color: kPrimaryColor),
       //all remaing styles
+    ).apply(
+      fontFamily: 'Inter',
     ),
 
     //-----------//
