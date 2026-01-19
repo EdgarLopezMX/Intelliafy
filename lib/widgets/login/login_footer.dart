@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:intelliafy_app/screens/signup_screen.dart';
+import 'package:intelliafy_app/screens/profile_screen.dart';
 
 class LoginFooter extends StatelessWidget {
   const LoginFooter({super.key});
@@ -33,7 +33,7 @@ class LoginFooter extends StatelessWidget {
                       ..onTap = () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SignUp())),
+                              builder: (context) => const ProfileScreen())),
                     text: 'Sign Up!',
                     style: TextStyle(
                       color: accentColor,
