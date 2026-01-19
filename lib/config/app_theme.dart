@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const Color kBackgroundColor = Color(0xFFF2F4F7);
-const Color kPrimaryColor = Color(0xFF2C3E50);
-const Color kAccentColor = Color(0xFF00BFA5);
+const Color kBackgroundColor = Color.fromRGBO(253, 254, 253, 1);
+const Color kPrimaryColor = Color.fromRGBO(22, 71, 68, 1);
+const Color kAccentColor = Color.fromRGBO(27, 181, 177, 1);
 const Color kErrorColor = Color(0xFFFF0000);
 const Color kTextColor = Color(0xFF444444);
 
