@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intelliafy_app/providers/auth_notifier.dart';
+import 'package:intelliafy_app/screens/tests/upload_questions.dart';
 import 'package:intelliafy_app/widgets/navigator_bar.dart';
 import 'package:intelliafy_app/widgets/profile/header_curved.dart';
+import 'package:intelliafy_app/widgets/tests/tittle_text.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -38,18 +40,6 @@ class _UploadTestMSScreen extends State<UploadTest> {
     _testTitleController.dispose();
     _courseController.dispose();
     _deadlineDateController.dispose();
-  }
-
-  Widget _textTitles({required String label, required Color color}) {
-    return Text(
-      label,
-      style: TextStyle(
-        color: color,
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
-        fontFamily: 'Inter',
-      ),
-    );
   }
 
   Widget _textFromFields({
@@ -194,7 +184,7 @@ class _UploadTestMSScreen extends State<UploadTest> {
     final auth = Provider.of<AuthNotifier>(context);
     final Color accentColor = Theme.of(context).colorScheme.secondary;
     final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final surfaceColor = Theme.of(context).colorScheme.surface;
+    final Color surfaceColor = Theme.of(context).colorScheme.surface;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -226,7 +216,7 @@ class _UploadTestMSScreen extends State<UploadTest> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _textTitles(
+                          textTitles(
                             label: 'Test Title: ',
                             color: primaryColor,
                           ),
@@ -276,13 +266,28 @@ class _UploadTestMSScreen extends State<UploadTest> {
                                         if (!mounted) return;
 
                                         if (testId != null) {
+                                          auth.setTestData(
+                                            id: testId,
+                                            title: _testTitleController.text,
+                                            course: _courseController.text,
+                                            dateText:
+                                                _deadlineDateController.text,
+                                            deadline: deadlineDateTimeStamp,
+                                          );
+
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             const SnackBar(
                                                 content:
                                                     Text('Test header saved!')),
                                           );
-                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => AddQuestionsScreen(testId: testId)));
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const UploadQuestions(),
+                                            ),
+                                          );
                                         } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(

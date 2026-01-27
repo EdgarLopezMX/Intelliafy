@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intelliafy_app/providers/auth_notifier.dart';
 import 'package:intelliafy_app/screens/login_screen.dart';
+import 'package:intelliafy_app/widgets/imagePicker_dialog.dart';
 import 'package:intelliafy_app/widgets/signUp/signup_footer.dart';
 import 'package:intelliafy_app/widgets/signUp/signup_form.dart';
 import 'package:provider/provider.dart';
@@ -91,93 +91,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _showImageDialog(AuthNotifier authNotifier) {
-    final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final Color accentColor = Theme.of(context).colorScheme.secondary;
-    final surfaceColor = Theme.of(context).colorScheme.surface;
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: surfaceColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            title: Text(
-              'Selecciona una opción:',
-              style: TextStyle(
-                fontSize: 18,
-                color: primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    Navigator.pop(context);
-                    final file =
-                        await authNotifier.pickImage(ImageSource.gallery);
-                    if (file != null) {
-                      setState(() => _imageFile = file);
-                    }
-                  },
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.camera,
-                          color: accentColor,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        'Camara',
-                        style: TextStyle(
-                          color: accentColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                InkWell(
-                  onTap: () async {
-                    Navigator.pop(context);
-                    final file =
-                        await AuthNotifier().pickImage(ImageSource.gallery);
-                    if (file != null) {
-                      setState(() => _imageFile = file);
-                    }
-                  },
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.image,
-                          color: accentColor,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        'Galeria',
-                        style: TextStyle(
-                          color: accentColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        });
+      context: context,
+      builder: (context) => ImagePickerDialog(
+        onImageSelected: (File file) {
+          setState(() => _imageFile = file);
+        },
+      ),
+    );
   }
 
   void _submitFormOnSignup(AuthNotifier authNotifier) async {
@@ -193,13 +114,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (authNotifier.errorMessage != null) {
         if (context.mounted) {
-          // Mostrar SnackBar de error
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(authNotifier.errorMessage!)),
           );
         }
       } else {
-        // Éxito
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
