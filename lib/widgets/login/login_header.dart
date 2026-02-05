@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class LoginHeader extends StatelessWidget {
   final double logoSize;

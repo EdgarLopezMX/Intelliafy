@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class HeaderCurvedContainer extends CustomPainter {
   final Color color;
@@ -6,21 +6,29 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = color;
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    Gradient gradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        color,
+        Color.alphaBlend(Colors.black.withValues(alpha: 0.1), color),
+      ],
+    );
+
+    Paint paint = Paint()..shader = gradient.createShader(rect);
+
     Path path = Path()
-      ..lineTo(0, size.height * 0.75) // Baja hasta el 75% del contenedor
+      ..lineTo(0, size.height * 0.75)
       ..quadraticBezierTo(
-          size.width * 0.15,
-          size.height, // Punto de control (curva hacia abajo)
-          size.width * 0.5,
-          size.height * 0.85) // Punto medio
+          size.width * 0.15, size.height, size.width * 0.5, size.height * 0.85)
       ..quadraticBezierTo(
-          size.width * 0.85,
-          size.height * 0.70, // Punto de control (curva hacia arriba)
-          size.width,
-          size.height * 0.9) // Final a la derecha
+          size.width * 0.85, size.height * 0.70, size.width, size.height * 0.9)
       ..lineTo(size.width, 0)
       ..close();
+
+    canvas.drawShadow(path.shift(const Offset(0, 2)), Colors.black, 8.0, true);
+
     canvas.drawPath(path, paint);
   }
 

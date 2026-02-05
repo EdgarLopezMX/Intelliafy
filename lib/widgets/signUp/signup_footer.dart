@@ -1,7 +1,4 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/screens/login_screen.dart';
-import 'package:intelliafy_app/widgets/logo.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class SignupFooter extends StatelessWidget {
   const SignupFooter({super.key});

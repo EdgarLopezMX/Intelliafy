@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/screens/test.dart';
+import 'package:intelliafy_app/screens/tests/test_details_screen.dart';
 import 'package:provider/provider.dart';
 
 class TestDetails extends StatelessWidget {
@@ -50,7 +50,7 @@ class TestDetails extends StatelessWidget {
                   color: accentColor,
                   spreadRadius: 2,
                   blurRadius: 1,
-                  offset: const Offset(0, 3),
+                  offset: const Offset(1, 3),
                 )
               ],
             ),
@@ -89,21 +89,25 @@ class TestDetails extends StatelessWidget {
                 }
               },
               contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               title: Text(title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                    fontSize: 18,
+                    height: 1.1,
+                  )),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(course,
                       style: const TextStyle(fontSize: 16, color: Colors.grey)),
-                  const SizedBox(height: 5),
                   Text(
                     isDeadlineAvailable ? 'Ends: $deadlineDate' : 'Finished',
                     style: TextStyle(
                       color: isDeadlineAvailable ? Colors.green : Colors.red,
                       fontWeight: FontWeight.bold,
+                      fontSize: 14,
                     ),
                   ),
                 ],
