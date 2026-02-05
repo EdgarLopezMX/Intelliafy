@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../services/auth_service.dart';
+import 'package:intelliafy_app/exports.dart';
+import 'package:intelliafy_app/services/auth_service.dart';
 
 class AuthNotifier extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -23,7 +21,55 @@ class AuthNotifier extends ChangeNotifier {
   List<String> _courseNames = [];
   List<String> get courseNames => _courseNames;
 
-  //---Login---
+  String _currentTestId = '';
+  String _currentTitle = '';
+  String _currentCourse = '';
+  String _currentDateText = '';
+  Timestamp? _currentDeadlineStamp;
+
+  String get currentTestId => _currentTestId;
+
+  String? _selectedCourse;
+  String? get selectedCourse => _selectedCourse;
+
+  Map<int, String> _selectedAnswers = {};
+  Map<int, String> get selectedAnswers => _selectedAnswers;
+  int _lastScore = 0;
+  int get lastScore => _lastScore;
+
+  void setTestData({
+    required String id,
+    required String title,
+    required String course,
+    required String dateText,
+    required Timestamp? deadline,
+  }) {
+    _currentTestId = id;
+    _currentTitle = title;
+    _currentCourse = course;
+    _currentDateText = dateText;
+    _currentDeadlineStamp = deadline;
+    notifyListeners();
+  }
+
+  AuthNotifier() {
+    _listenToAuthChanges();
+  }
+
+  void _listenToAuthChanges() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      _user = user;
+      if (user != null) {
+        fetchUserData(user.uid);
+        fetchCourses();
+      } else {
+        _userData = null;
+        _courseNames = [];
+      }
+      notifyListeners();
+    });
+  }
+
   Future<void> signIn({required String email, required String password}) async {
     _setLoading(true);
     try {
@@ -35,7 +81,6 @@ class AuthNotifier extends ChangeNotifier {
     _setLoading(false);
   }
 
-  //---SignUp---
   Future<bool> signUp({
     required String fullName,
     required String email,
@@ -66,7 +111,6 @@ class AuthNotifier extends ChangeNotifier {
     }
   }
 
-  //---Imagen Selector---
   Future<File?> pickImage(ImageSource source) async {
     return await _authService.pickAndCropImage(source);
   }
@@ -76,7 +120,6 @@ class AuthNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Método para cargar datos de Firestore
   Future<void> fetchUserData(String uid) async {
     _isLoading = true;
     notifyListeners();
@@ -95,16 +138,11 @@ class AuthNotifier extends ChangeNotifier {
     }
   }
 
-  void signOut() {}
-
   Future<void> fetchCourses() async {
     _setLoading(true);
     try {
-      // Accedemos a la colección 'course'
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('course').get();
-
-      // Mapeamos los documentos para extraer solo el campo 'name'
       _courseNames =
           querySnapshot.docs.map((doc) => doc.get('name') as String).toList();
 
@@ -148,6 +186,123 @@ class AuthNotifier extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       return null;
+    }
+  }
+
+  Future<bool> uploadCompleteTest(List<Map<String, dynamic>> questions) async {
+    _setLoading(true);
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+
+      await FirebaseFirestore.instance
+          .collection('tests')
+          .doc(_currentTestId)
+          .set({
+        'testId': _currentTestId,
+        'uploadedBy': uid,
+        'testTitle': _currentTitle,
+        'author': _userData?['name'],
+        'courseName': _currentCourse,
+        'deadlineDate': _currentDateText,
+        'deadlineDateTimeStamp': _currentDeadlineStamp,
+        'questions': questions,
+        'recruitment': true,
+        'createdAt': Timestamp.now(),
+      });
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  void setCourseFilter(String? course) {
+    _selectedCourse = course;
+    notifyListeners();
+  }
+
+  void setAnswer(int questionIndex, String answer) {
+    _selectedAnswers[questionIndex] = answer;
+    notifyListeners();
+  }
+
+  void clearAnswers() {
+    _selectedAnswers = {};
+    notifyListeners();
+  }
+
+  Future<bool> submitTestResult({
+    required String testId,
+    required List<dynamic> originalQuestions,
+    required Map<int, String> studentAnswers,
+  }) async {
+    _setLoading(true);
+    try {
+      int correctCount = 0;
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+
+      if (uid == null) throw "Debes estar conectado para enviar el test";
+
+      for (int i = 0; i < originalQuestions.length; i++) {
+        final dynamic correctIndexRaw =
+            originalQuestions[i]['correctAnswerIndex'];
+        final int correctIndex = correctIndexRaw is int
+            ? correctIndexRaw
+            : int.parse(correctIndexRaw.toString());
+        final List<dynamic> answersList = originalQuestions[i]['answers'];
+        final String correctAnswerText = answersList[correctIndex].toString();
+
+        if (studentAnswers[i] == correctAnswerText) {
+          correctCount++;
+        }
+      }
+
+      _lastScore = correctCount;
+
+      await FirebaseFirestore.instance.collection('submissions').add({
+        'testId': testId,
+        'studentId': uid,
+        'studentName': _userData?['name'] ?? 'Estudiante',
+        'score': "$correctCount / ${originalQuestions.length}",
+        'points': correctCount,
+        'totalQuestions': originalQuestions.length,
+        'submittedAt': FieldValue.serverTimestamp(),
+      });
+
+      _errorMessage = null;
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      print("ERROR AL SUBIR: $e");
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<bool> checkIfAlreadySubmitted(String testId) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return false;
+
+    final query = await FirebaseFirestore.instance
+        .collection('submissions')
+        .where('testId', isEqualTo: testId)
+        .where('studentId', isEqualTo: uid)
+        .get();
+
+    return query.docs.isNotEmpty;
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _authService.signOut();
+      _userData = null;
+      _errorMessage = null;
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
     }
   }
 }

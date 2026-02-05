@@ -62,4 +62,14 @@ class AuthService {
     );
     return croppedImage != null ? File(croppedImage.path) : null;
   }
+
+  //---Logout---
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print("Error al cerrar sesión: $e");
+      rethrow;
+    }
+  }
 }
