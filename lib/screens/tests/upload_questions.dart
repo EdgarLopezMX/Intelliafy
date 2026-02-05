@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/widgets/profile/header_curved.dart';
-import 'package:intelliafy_app/widgets/tests/tittle_text.dart';
-import 'package:provider/provider.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class UploadQuestions extends StatefulWidget {
   const UploadQuestions({

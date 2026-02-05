@@ -1,11 +1,5 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/screens/login_screen.dart';
-import 'package:intelliafy_app/widgets/imagePicker_dialog.dart';
-import 'package:intelliafy_app/widgets/signUp/signup_footer.dart';
-import 'package:intelliafy_app/widgets/signUp/signup_form.dart';
-import 'package:provider/provider.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

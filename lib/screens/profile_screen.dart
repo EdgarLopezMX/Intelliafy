@@ -1,13 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/widgets/profile/header_curved.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/widgets/navigator_bar.dart';
-import 'package:intelliafy_app/widgets/profile/info_section.dart';
-import 'package:intelliafy_app/widgets/profile/profile_info.dart';
+import 'package:intelliafy_app/exports.dart';
 import 'package:intl/intl.dart';
-
-import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -36,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     double profileSize = MediaQuery.of(context).size.width * 0.45;
 
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBarForApp(indexNum: 1),
+      bottomNavigationBar: const BottomNavigationBarForApp(indexNum: 2),
       backgroundColor: surfaceColor,
       body: Consumer<AuthNotifier>(
         builder: (context, auth, child) {
@@ -95,17 +87,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Align(
                             alignment: Alignment.center,
                             child: Text(
-                              data?['name'] ?? 'Cargando...',
+                              data?['name'] ?? 'Loading...',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: primaryColor,
                                 fontSize: 26.0,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Inter',
+                                height: 1.1,
                               ),
                             ),
                           ),
                           infoSection(
-                            content: data?['email'] ?? 'No disponible',
+                            content: data?['email'] ?? 'Not available',
                           ),
                           Divider(color: primaryColor),
                           const SizedBox(
@@ -119,7 +114,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                             child: TextButton.icon(
-                              onPressed: () => auth.signOut(),
+                              onPressed: () async => {
+                                await auth.signOut(),
+                                if (context.mounted)
+                                  {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreen()),
+                                      (route) => false,
+                                    ),
+                                  }
+                              },
                               icon: const Icon(
                                 Icons.logout,
                                 color: Colors.red,

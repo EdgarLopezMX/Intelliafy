@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/widgets/profile/header_curved.dart';
+import 'package:intelliafy_app/exports.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class TestScreen extends StatelessWidget {
   final Map<String, dynamic> testData;
@@ -48,9 +44,7 @@ class TestScreen extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
                   children: [
-                    //_buildTestHeader(testData, surfaceColor, accentColor),
                     const SizedBox(height: 20),
-                    // Lista de preguntas
                     ...questions.asMap().entries.map((entry) {
                       return _buildQuestionCard(
                         index: entry.key,
@@ -85,7 +79,7 @@ class TestScreen extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            "Por favor, responde todas las preguntas")),
+                                            "Please answer all the questions")),
                                   );
                                   return;
                                 }
@@ -111,7 +105,7 @@ class TestScreen extends StatelessWidget {
                                 }
                               },
                               child: Text(
-                                "ENVIAR RESPUESTAS",
+                                "SEND ANSWERS",
                                 style: TextStyle(
                                     color: surfaceColor,
                                     fontWeight: FontWeight.bold,

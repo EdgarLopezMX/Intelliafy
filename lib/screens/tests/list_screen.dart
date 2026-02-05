@@ -1,10 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/widgets/navigator_bar.dart';
-import 'package:intelliafy_app/widgets/profile/header_curved.dart';
-import 'package:intelliafy_app/widgets/tests/test_details.dart';
-import 'package:provider/provider.dart';
+import 'package:intelliafy_app/exports.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -36,7 +30,7 @@ class _ListScreen extends State<ListScreen> with TickerProviderStateMixin {
 
   Widget _buildFilterMenu(AuthNotifier auth, Color color) {
     return PopupMenuButton<String>(
-      icon: Icon(Icons.tune, color: color, size: 28),
+      icon: Icon(Icons.tune, color: color, size: 30),
       onSelected: (String value) {
         auth.setCourseFilter(value == "All" ? null : value);
       },
@@ -62,7 +56,7 @@ class _ListScreen extends State<ListScreen> with TickerProviderStateMixin {
     final Color surfaceColor = Theme.of(context).colorScheme.surface;
 
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBarForApp(indexNum: 0),
+        bottomNavigationBar: const BottomNavigationBarForApp(indexNum: 0),
         backgroundColor: surfaceColor,
         body: Stack(
           alignment: Alignment.center,
@@ -88,11 +82,12 @@ class _ListScreen extends State<ListScreen> with TickerProviderStateMixin {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            "Tests: ${auth.selectedCourse ?? 'All'}",
+                            auth.selectedCourse ?? 'All',
                             style: TextStyle(
                                 color: surfaceColor,
                                 fontSize: 26,
-                                fontFamily: 'Init'),
+                                fontFamily: 'Init',
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -115,8 +110,7 @@ class _ListScreen extends State<ListScreen> with TickerProviderStateMixin {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return const Center(
-                            child: Text('No hay tests disponibles'));
+                        return const Center(child: Text('No tests available'));
                       }
                       return ListView.builder(
                         padding: const EdgeInsets.only(

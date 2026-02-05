@@ -1,12 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intelliafy_app/providers/auth_notifier.dart';
-import 'package:intelliafy_app/screens/tests/upload_questions.dart';
-import 'package:intelliafy_app/widgets/navigator_bar.dart';
-import 'package:intelliafy_app/widgets/profile/header_curved.dart';
-import 'package:intelliafy_app/widgets/tests/tittle_text.dart';
+import 'package:intelliafy_app/exports.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class UploadTest extends StatefulWidget {
   const UploadTest({super.key});
@@ -188,7 +181,7 @@ class _UploadTestMSScreen extends State<UploadTest> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBarForApp(indexNum: 2),
+      bottomNavigationBar: const BottomNavigationBarForApp(indexNum: 1),
       backgroundColor: surfaceColor,
       body: Stack(alignment: Alignment.center, children: [
         Positioned(
@@ -301,7 +294,7 @@ class _UploadTestMSScreen extends State<UploadTest> {
                               color: accentColor,
                               elevation: 4,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(30)),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 14),
